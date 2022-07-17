@@ -1,31 +1,16 @@
 from flask_app import app
-from flask import render_template, redirect, request, session, flash
-from flask_bcrypt import Bcrypt        
+from flask import render_template, jsonify 
 from flask_app.models.model_name import Class_Name
+import os
+import requests
 
-bcrypt = Bcrypt(app)
+# bcrypt = Bcrypt(app)
+
+@app.route('/searching')
+def get_api():
+    r = requests.get(f'https://api.nasa.gov/planetary/apod?api_key=GUbcVwow399v0AHvkHKPk9WcM9HMuJXI3Pp5gO9')
+    return jsonify( r.json() )
 
 @app.route('/')
-def show_home_page():
-    return render_template('index.html')
-
-@app.route('/create-user', methods=['POST'])
-def create_user():
-    if not User.validate(request.form):
-        return redirect('/')
-    data = {
-        'key': request.form['value'],
-    }
-    user_id = User.create(data)
-    session['user_id'] = user_id
-    return redirect('/wall')
-
-@app.route('/dashboard')
 def show_dashboard():
-    if 'user_id' not in session:
-        flash('You must be logged in to view')
-        return redirect('/logout')
-    data = {
-        'id': session['user_id']
-    }
-    return render_template('wall.html', user=User.get_from_id(data))
+    return 'This is the Dashboard'
