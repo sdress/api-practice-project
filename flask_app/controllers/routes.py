@@ -13,4 +13,4 @@ def get_api():
 
 @app.route('/')
 def show_dashboard():
-    return 'This is the Dashboard'
+    return render_template('dashboard.html')
